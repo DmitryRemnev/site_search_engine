@@ -1,3 +1,4 @@
+import lombok.SneakyThrows;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,7 +16,7 @@ public class SiteRecursiveAction extends RecursiveAction {
     public static final String REFERRER = "http://www.google.com";
     public static final String CSS_QUERY = "a[href]";
     public static final String ATTRIBUTE_KEY = "abs:href";
-    public static final int FIVE_SECOND = 5000;
+    public static final String REG_TYPES_FILES = ".*\\.(jpg|docx|doc|pdf|png|zip)";
     private static final Set<String> linksSeen = ConcurrentHashMap.newKeySet();
     private final String url;
     private final List<String> links;
@@ -29,23 +30,20 @@ public class SiteRecursiveAction extends RecursiveAction {
                     .maxBodySize(0)
                     .userAgent(AGENT)
                     .referrer(REFERRER)
-                    .timeout(FIVE_SECOND)
                     .ignoreHttpErrors(true);
 
             Document document = connect.ignoreContentType(true).get();
 
             Elements elements = document.select(CSS_QUERY);
             elements.forEach(element -> {
-                String s = element.attr(ATTRIBUTE_KEY);
-                if (!linksSeen.contains(s) && s.startsWith(this.url) && !s.contains("#")) {
-                    linksSeen.add(s);
-                    links.add(s);
+                String link = element.attr(ATTRIBUTE_KEY);
+                if (checkLink(link)) {
+                    linksSeen.add(link);
+                    links.add(link);
                 }
             });
 
-            System.out.println("/" + path);
-            System.out.println(connect.response().statusCode());
-            System.out.println(document.html());
+            DBConnection.addLine("/" + path, connect.response().statusCode(), document.html());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,6 +55,19 @@ public class SiteRecursiveAction extends RecursiveAction {
         for (String link : links) {
             String path = link.replace(url, "");
             new SiteRecursiveAction(url, path).invoke();
+
+            /*try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
         }
+    }
+
+    private boolean checkLink(String link) {
+        return !linksSeen.contains(link) &&
+                link.startsWith(this.url) &&
+                !link.contains("#") &&
+                !link.matches(REG_TYPES_FILES);
     }
 }
