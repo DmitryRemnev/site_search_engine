@@ -5,7 +5,9 @@ public class Main {
     public static final String URL = "https://skillbox.ru/";
 
     public static void main(String[] args) throws SQLException {
-        new ForkJoinPool().invoke(new SiteRecursiveAction(URL, ""));
+        Site root = new Site(URL);
+
+        new ForkJoinPool().invoke(new SiteRecursiveAction(root));
 
         //DBConnection.executeMultiInsert();
     }
