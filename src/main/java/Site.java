@@ -30,7 +30,7 @@ public class Site {
 
             Document document = connect.ignoreContentType(true).get();
 
-            DBConnection.addLine(url, connect.response().statusCode(), "qwerty");
+            DBConnection.addLine(url, connect.response().statusCode(), document.html());
 
             Elements elements = document.select(CSS_QUERY);
             elements.forEach(element -> {

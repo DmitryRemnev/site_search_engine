@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DBConnection {
@@ -33,17 +34,14 @@ public class DBConnection {
     }
 
     public static void addLine(String path, int code, String content) throws SQLException {
-        insertQuery.append(insertQuery.length() == 0 ? "" : ",")
-                .append("('")
-                .append(path)
-                .append("', '")
-                .append(code)
-                .append("', '")
-                .append(content)
-                .append("')");
+        String sqlQuery = "INSERT INTO page(path, code, content) VALUES (?, ?, ?)";
 
-        String sqlQuery = "INSERT INTO page(path, code, content) VALUES" + insertQuery;
-        DBConnection.getConnection().createStatement().execute(sqlQuery);
+        PreparedStatement statement = getConnection().prepareStatement(sqlQuery);
+        statement.setString(1, path);
+        statement.setInt(2, code);
+        statement.setString(3, content);
+
+        statement.execute();
     }
 
     public static void executeMultiInsert() throws SQLException {
