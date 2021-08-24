@@ -1,13 +1,11 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBConnection {
-    private static final String DB_NAME = "search_engine";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "Tgb10Ujm73";
-    private static final StringBuilder insertQuery = new StringBuilder();
+    private static final List<String> PATH_LIST = new ArrayList<>();
+    private static final List<Integer> CODE_LIST = new ArrayList<>();
+    private static final List<String> CONTENT_LIST = new ArrayList<>();
 
     private static Connection connection;
 
@@ -15,16 +13,21 @@ public class DBConnection {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/" + DB_NAME +
-                                "?user=" + DB_USER + "&password=" + DB_PASS + "&serverTimezone=UTC");
+                        Constants.LOCAL_HOST +
+                                Constants.DB_NAME +
+                                Constants.USER +
+                                Constants.DB_USER +
+                                Constants.PASSWORD +
+                                Constants.DB_PASS +
+                                Constants.TIME_ZONE);
 
-                connection.createStatement().execute("DROP TABLE IF EXISTS page");
-                connection.createStatement().execute("CREATE TABLE page(" +
-                        "id INT NOT NULL AUTO_INCREMENT, " +
-                        "path TEXT NOT NULL, " +
-                        "code INT NOT NULL, " +
-                        "content MEDIUMTEXT NOT NULL, " +
-                        "PRIMARY KEY(id))");
+                connection.createStatement().execute(Constants.DROP_TABLE);
+                connection.createStatement().execute(Constants.CREATE_TABLE +
+                        Constants.ID_INT +
+                        Constants.PATH_TEXT +
+                        Constants.CODE_INT +
+                        Constants.CONTENT_MEDIUMTEXT +
+                        Constants.PRIMARY_KEY);
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -33,21 +36,26 @@ public class DBConnection {
         return connection;
     }
 
-    public static void addLine(String path, int code, String content) throws SQLException {
-        String sqlQuery = "INSERT INTO page(path, code, content) VALUES (?, ?, ?)";
-
-        PreparedStatement statement = getConnection().prepareStatement(sqlQuery);
-        statement.setString(1, path);
-        statement.setInt(2, code);
-        statement.setString(3, content);
-
-        statement.execute();
+    public static void addLine(String path, int code, String content) {
+        PATH_LIST.add(path);
+        CODE_LIST.add(code);
+        CONTENT_LIST.add(content);
     }
 
-    public static void executeMultiInsert() throws SQLException {
-        String sqlQuery = "INSERT INTO page(path, code, content) VALUES" +
-                insertQuery;
+    public static void executeMultiInsert() {
+        try (PreparedStatement statement = getConnection().prepareStatement(Constants.SQL_QUERY)) {
 
-        DBConnection.getConnection().createStatement().execute(sqlQuery);
+            for (int i = 0; i < PATH_LIST.size(); i++) {
+                statement.setString(1, PATH_LIST.get(i));
+                statement.setInt(2, CODE_LIST.get(i));
+                statement.setString(3, CONTENT_LIST.get(i));
+
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

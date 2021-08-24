@@ -1,14 +1,12 @@
-import java.sql.SQLException;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
-    public static final String URL = "https://skillbox.ru/";
 
-    public static void main(String[] args) throws SQLException {
-        Site root = new Site(URL);
+    public static void main(String[] args) {
+        Site root = new Site(Constants.BASE_URL);
 
         new ForkJoinPool().invoke(new SiteRecursiveAction(root));
 
-        //DBConnection.executeMultiInsert();
+        DBConnection.executeMultiInsert();
     }
 }

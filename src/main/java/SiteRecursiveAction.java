@@ -2,8 +2,6 @@ import java.util.*;
 import java.util.concurrent.RecursiveAction;
 
 public class SiteRecursiveAction extends RecursiveAction {
-
-    public static final String REG_TYPES_FILES = ".*\\.(jpg|docx|doc|pdf|png|zip)";
     private final Site site;
     private final Set<String> allUrls;
 
@@ -23,7 +21,7 @@ public class SiteRecursiveAction extends RecursiveAction {
 
         for (String link : site.getUrls()) {
 
-            if (checkLink(link, allUrls)) {
+            if (isNotAdd(link, allUrls)) {
                 continue;
             }
             allUrls.add(link);
@@ -32,7 +30,7 @@ public class SiteRecursiveAction extends RecursiveAction {
             taskList.add(task);
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(Constants.THREAD_SLEEP);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -43,9 +41,7 @@ public class SiteRecursiveAction extends RecursiveAction {
         }
     }
 
-    private boolean checkLink(String link, Set<String> allUrls) {
-        return allUrls.contains(link) ||
-                link.contains("#") ||
-                link.matches(REG_TYPES_FILES);
+    private boolean isNotAdd(String link, Set<String> allUrls) {
+        return allUrls.contains(link) || link.matches(Constants.REG_TYPES_FILES);
     }
 }

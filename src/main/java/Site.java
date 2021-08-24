@@ -7,44 +7,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Site {
-    public static final String AGENT = "SearchBot";
-    public static final String REFERRER = "http://www.google.com";
-    public static final String CSS_QUERY = "a[href]";
-    public static final String ATTRIBUTE_KEY = "abs:href";
 
     private final String url;
+    private final List<String> urls = new ArrayList<>();
+    private Document document;
 
     public Site(String url) {
         this.url = url;
     }
 
     public List<String> getUrls() {
-        List<String> urls = new ArrayList<>();
+        addToDataBase();
+        return urls;
+    }
 
+    private void addToDataBase() {
         try {
             Connection connect = Jsoup.connect(url)
                     .maxBodySize(0)
-                    .userAgent(AGENT)
-                    .referrer(REFERRER)
+                    .userAgent(Constants.AGENT)
+                    .referrer(Constants.REFERRER)
                     .ignoreHttpErrors(true);
 
-            Document document = connect.ignoreContentType(true).get();
+            document = connect.ignoreContentType(true).get();
 
-            DBConnection.addLine(url, connect.response().statusCode(), document.html());
+            DBConnection.addLine(url.replace(Constants.BASE_URL, Constants.SLASH),
+                    connect.response().statusCode(),
+                    document.html());
 
-            Elements elements = document.select(CSS_QUERY);
-            elements.forEach(element -> {
-                String link = element.attr(ATTRIBUTE_KEY);
-
-                if (link.contains(url)) {
-                    urls.add(link);
-                }
-            });
-
+            sortElement();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        return urls;
+    private void sortElement() {
+        Elements elements = document.select(Constants.CSS_QUERY);
+        elements.forEach(element -> {
+            String link = element.attr(Constants.ATTRIBUTE_KEY);
+
+            if (isAdd(link)) {
+                urls.add(link);
+            }
+        });
+    }
+
+    private boolean isAdd(String link) {
+        return link.contains(url) && !link.equals(url);
     }
 }
