@@ -8,6 +8,7 @@ public class Constants {
     public static final String USER = "?user=";
     public static final String PASSWORD = "&password=";
     public static final String TIME_ZONE = "&serverTimezone=UTC";
+    public static final String USE_SSL = "&useSSL=false";
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS page";
     public static final String CREATE_TABLE = "CREATE TABLE page(";
     public static final String ID_INT = "id INT NOT NULL AUTO_INCREMENT, ";

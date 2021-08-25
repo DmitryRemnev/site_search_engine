@@ -21,10 +21,12 @@ public class SiteRecursiveAction extends RecursiveAction {
 
         for (String link : site.getUrls()) {
 
-            if (isNotAdd(link, allUrls)) {
-                continue;
+            synchronized (allUrls) {
+                if (isNotAdd(link, allUrls)) {
+                    continue;
+                }
+                allUrls.add(link);
             }
-            allUrls.add(link);
             SiteRecursiveAction task = new SiteRecursiveAction(new Site(link), allUrls);
             task.fork();
             taskList.add(task);

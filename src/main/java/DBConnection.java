@@ -19,7 +19,8 @@ public class DBConnection {
                                 Constants.DB_USER +
                                 Constants.PASSWORD +
                                 Constants.DB_PASS +
-                                Constants.TIME_ZONE);
+                                Constants.TIME_ZONE +
+                                Constants.USE_SSL);
 
                 connection.createStatement().execute(Constants.DROP_TABLE);
                 connection.createStatement().execute(Constants.CREATE_TABLE +
@@ -54,6 +55,7 @@ public class DBConnection {
             }
 
             statement.executeBatch();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
