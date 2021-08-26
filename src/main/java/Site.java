@@ -11,6 +11,7 @@ public class Site {
     private final String url;
     private final List<String> urls = new ArrayList<>();
     private Document document;
+    private Connection connect;
 
     public Site(String url) {
         this.url = url;
@@ -23,7 +24,7 @@ public class Site {
 
     private void addToDataBase() {
         try {
-            Connection connect = Jsoup.connect(url)
+            connect = Jsoup.connect(url)
                     .maxBodySize(0)
                     .userAgent(Constants.AGENT)
                     .referrer(Constants.REFERRER)
@@ -31,14 +32,19 @@ public class Site {
 
             document = connect.ignoreContentType(true).get();
 
-            DBConnection.addLine(url.replace(Constants.BASE_URL, Constants.SLASH),
-                    connect.response().statusCode(),
-                    document.html());
-
+            addLine();
             sortElement();
+
         } catch (Exception e) {
+            addLine();
             e.printStackTrace();
         }
+    }
+
+    private void addLine() {
+        DBConnection.addLine(url.replace(Constants.BASE_URL, Constants.SLASH),
+                connect.response().statusCode(),
+                document.html());
     }
 
     private void sortElement() {
