@@ -1,3 +1,5 @@
+import DB.PageTableWorker;
+
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
@@ -7,6 +9,8 @@ public class Main {
 
         new ForkJoinPool().invoke(new SiteRecursiveAction(root));
 
-        DBConnection.executeMultiInsert();
+        PageTableWorker.executeMultiInsert();
+
+        ContentHandler.toHandle();
     }
 }

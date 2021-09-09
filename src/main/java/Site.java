@@ -1,3 +1,4 @@
+import DB.PageTableWorker;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -42,7 +43,7 @@ public class Site {
     }
 
     private void addLine() {
-        DBConnection.addLine(url.replace(Constants.BASE_URL, Constants.SLASH),
+        PageTableWorker.addLine(url.replace(Constants.BASE_URL, Constants.SLASH),
                 connect.response().statusCode(),
                 document.html());
     }
