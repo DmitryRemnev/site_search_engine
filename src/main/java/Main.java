@@ -1,3 +1,4 @@
+import DB.DBConnection;
 import DB.PageTableWorker;
 
 import java.util.concurrent.ForkJoinPool;
@@ -11,6 +12,9 @@ public class Main {
 
         PageTableWorker.executeMultiInsert();
 
+        new ContentHandler();
         ContentHandler.toHandle();
+
+        DBConnection.closeConnection();
     }
 }

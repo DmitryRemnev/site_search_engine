@@ -11,7 +11,7 @@ import static DB.DBConnection.getConnection;
 
 public class PageTableWorker {
     public static final String SQL_QUERY_INSERT = "INSERT INTO _page(path, code, content) VALUES (?, ?, ?)";
-    public static final String SQL_QUERY_SELECT = "SELECT content FROM _page;";
+    public static final String SQL_QUERY_SELECT = "SELECT * FROM _page;";
 
     private static final List<String> PATH_LIST = new ArrayList<>();
     private static final List<Integer> CODE_LIST = new ArrayList<>();
@@ -42,7 +42,7 @@ public class PageTableWorker {
         System.out.println("End INSERT");
     }
 
-    public static ResultSet getContent() {
+    public static ResultSet getPageResultSet() {
         try {
             Statement statement = getConnection().createStatement();
 
