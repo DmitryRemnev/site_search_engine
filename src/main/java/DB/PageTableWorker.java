@@ -24,7 +24,6 @@ public class PageTableWorker {
     }
 
     public static void executeMultiInsert() {
-        System.out.println("Begin INSERT");
         try (PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_INSERT)) {
 
             for (int i = 0; i < PATH_LIST.size(); i++) {
@@ -39,7 +38,6 @@ public class PageTableWorker {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("End INSERT");
     }
 
     public static ResultSet getPageResultSet() {

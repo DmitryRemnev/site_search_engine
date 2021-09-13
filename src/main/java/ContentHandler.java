@@ -1,4 +1,6 @@
 import DB.FieldTableWorker;
+import DB.IndexTableWorker;
+import DB.LemmaTableWorker;
 import DB.PageTableWorker;
 
 import org.jsoup.Jsoup;
@@ -8,25 +10,19 @@ import org.jsoup.select.Elements;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ContentHandler {
-    public static final int CODE_OK = 200;
-    public static final String COLUMN_CODE = "code";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_WEIGHT = "weight";
-    public static final String COLUMN_CONTENT = "content";
-    private static final ArrayList<Field> FIELDS = new ArrayList<>();
+    private final ArrayList<Field> fields = new ArrayList<>();
 
     ContentHandler() {
         ResultSet resultSet = FieldTableWorker.getFields();
         if (resultSet != null) {
             try {
                 while (resultSet.next()) {
-                    FIELDS.add(new Field(resultSet.getString(COLUMN_NAME), resultSet.getFloat(COLUMN_WEIGHT)));
+                    fields.add(new Field(resultSet.getString(Constants.COLUMN_NAME), resultSet.getFloat(Constants.COLUMN_WEIGHT)));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -34,50 +30,92 @@ public class ContentHandler {
         }
     }
 
-    public static void toHandle() {
-        ResultSet resultSet = PageTableWorker.getPageResultSet();
+    public void toHandle() {
+        ResultSet pageResultSet = PageTableWorker.getPageResultSet();
 
-        if (resultSet != null) {
+        if (pageResultSet != null) {
             try {
-                boolean flag = true;
+                //int x = 1;
 
-                while (resultSet.next()) {
-                    if (resultSet.getInt(COLUMN_CODE) == CODE_OK && flag) {
+                while (pageResultSet.next()) {
+                    if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
                         StringBuilder text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();
+                        int pageId = pageResultSet.getInt(Constants.COLUMN_ID);
 
-                        for (Field field : FIELDS) {
+                        for (Field field : fields) {
                             try {
-                                Document document = Jsoup.parse(resultSet.getString(COLUMN_CONTENT));
-                                Elements elements = document.getElementsByTag(field.getName());
-                                for (Element element : elements) {
-                                    text.append(element.text());
-                                }
-
-                                Map<String, Double> map = new HashMap<>(Lemmatizer.getLemmaMap(text.toString(), field.getWeight()));
-                                for (String key : map.keySet()) {
-                                    if (lemmaMap.containsKey(key)) {
-                                        lemmaMap.put(key, lemmaMap.get(key) + map.get(key));
-                                    } else {
-                                        lemmaMap.put(key, map.get(key));
-                                    }
-                                }
+                                addElementsToText(pageResultSet.getString(Constants.COLUMN_CONTENT), field.getName(), text);
+                                fillingLemmaMap(text.toString(), field.getWeight(), lemmaMap);
 
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
                         }
 
-                        DecimalFormat df = new DecimalFormat("#.#");
-                        int i = 1;
-                        for (String key : lemmaMap.keySet()) {
-                            String value = df.format(lemmaMap.get(key));
-                            System.out.println(i + ") " + key + " - " + value);
-                            i++;
-                        }
+                        for (Map.Entry<String, Double> item : lemmaMap.entrySet()) {
 
-                        flag = false;
+                            ResultSet lemmaResultCount = LemmaTableWorker.getResultLemma(item.getKey());
+                            if (lemmaResultCount != null) {
+                                lemmaResultCount.last();
+
+                                if (lemmaResultCount.getRow() == 0) {
+                                    lemmaInsert(item.getKey());
+                                    indexInsert(item.getKey(), pageId, item.getValue());
+                                }
+
+                                if (lemmaResultCount.getRow() == 1) {
+                                    lemmaUpdate(item.getKey());
+                                }
+                            }
+                        }
                     }
+                    //x++;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addElementsToText(String html, String tagName, StringBuilder text) {
+        Document document = Jsoup.parse(html);
+        Elements elements = document.getElementsByTag(tagName);
+
+        for (Element element : elements) {
+            text.append(element.text());
+        }
+    }
+
+    private void fillingLemmaMap(String text, Double weight, Map<String, Double> lemmaMap) {
+        Map<String, Double> map = new HashMap<>(Lemmatizer.getLemmaAndRatingMap(text, weight));
+
+        for (Map.Entry<String, Double> item : map.entrySet()) {
+            if (lemmaMap.containsKey(item.getKey())) {
+                lemmaMap.put(item.getKey(), lemmaMap.get(item.getKey()) + map.get(item.getKey()));
+            } else {
+                lemmaMap.put(item.getKey(), item.getValue());
+            }
+        }
+    }
+
+    private void lemmaInsert(String lemma) {
+        LemmaTableWorker.executeInsert(lemma, Constants.FREQUENCY);
+    }
+
+    private void lemmaUpdate(String lemma) {
+        LemmaTableWorker.executeUpdate(lemma);
+    }
+
+    private void indexInsert(String lemma, int pageId, double rating) {
+        ResultSet lemmaResultSet = LemmaTableWorker.getResultLemma(lemma);
+
+        if (lemmaResultSet != null) {
+            try {
+                while (lemmaResultSet.next()) {
+                    int lemmaId = lemmaResultSet.getInt(Constants.COLUMN_ID);
+                    IndexTableWorker.executeInsert(pageId, lemmaId, rating);
                 }
 
             } catch (SQLException e) {

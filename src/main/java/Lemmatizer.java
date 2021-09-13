@@ -8,17 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Lemmatizer {
-    public static final String RUSSIAN_LETTERS = "[А-Яа-я]";
-    public static final String WORD_UNION = "СОЮЗ";
-    public static final String WORD_PREPOSITION = "ПРЕДЛ";
-    public static final String WORD_INTERJECTION = "МЕЖД";
-    public static final String WORD_DEMONSTRATIVE = "указат";
-    public static final String WORD_PREDICATIVE = "ПРЕДК";
-
     public static LuceneMorphology luceneMorph;
 
-    static Map<String, Double> getLemmaMap(String text, Double weight) {
-        Map<String, Double> lemmaMap = new HashMap<>();
+    static Map<String, Double> getLemmaAndRatingMap(String text, Double weight) {
+        Map<String, Double> lemmaAndRatingMap = new HashMap<>();
 
         try {
             luceneMorph = new RussianLuceneMorphology();
@@ -28,10 +21,10 @@ public class Lemmatizer {
 
         for (String word : getWords(text)) {
             List<String> wordBaseForms = luceneMorph.getNormalForms(word);
-            addToLemmaList(wordBaseForms, lemmaMap, weight);
+            addToLemmaAndRatingMap(wordBaseForms, lemmaAndRatingMap, weight);
         }
 
-        return lemmaMap;
+        return lemmaAndRatingMap;
     }
 
     static List<String> getWords(String text) {
@@ -44,7 +37,7 @@ public class Lemmatizer {
 
             c = text.charAt(i);
 
-            if (Character.toString(c).matches(RUSSIAN_LETTERS)) {
+            if (Character.toString(c).matches(Constants.RUSSIAN_LETTERS)) {
                 if (isNewString) {
                     builder = new StringBuilder();
                     builder.append(c);
@@ -78,11 +71,11 @@ public class Lemmatizer {
         List<String> wordInfo = luceneMorph.getMorphInfo(word);
         boolean isAdd = true;
         for (String info : wordInfo) {
-            if (info.contains(WORD_UNION) ||
-                    info.contains(WORD_PREPOSITION) ||
-                    info.contains(WORD_INTERJECTION) ||
-                    info.contains(WORD_DEMONSTRATIVE) ||
-                    info.contains(WORD_PREDICATIVE)) {
+            if (info.contains(Constants.WORD_UNION) ||
+                    info.contains(Constants.WORD_PREPOSITION) ||
+                    info.contains(Constants.WORD_INTERJECTION) ||
+                    info.contains(Constants.WORD_DEMONSTRATIVE) ||
+                    info.contains(Constants.WORD_PREDICATIVE)) {
 
                 isAdd = false;
                 break;
@@ -92,12 +85,12 @@ public class Lemmatizer {
         return isAdd;
     }
 
-    private static void addToLemmaList(List<String> wordBaseForms, Map<String, Double> cleanList, Double weight) {
+    private static void addToLemmaAndRatingMap(List<String> wordBaseForms, Map<String, Double> lemmaAndRatingMap, Double weight) {
         for (String word : wordBaseForms) {
-            if (cleanList.containsKey(word)) {
-                cleanList.put(word, cleanList.get(word) + weight);
+            if (lemmaAndRatingMap.containsKey(word)) {
+                lemmaAndRatingMap.put(word, lemmaAndRatingMap.get(word) + weight);
             } else {
-                cleanList.put(word, weight);
+                lemmaAndRatingMap.put(word, weight);
             }
         }
     }
