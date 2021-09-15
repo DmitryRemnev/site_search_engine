@@ -103,42 +103,42 @@
             <artifactId>morphology</artifactId>
             <version>1.5</version>
             <scope>system</scope>
-            <systemPath>C:/Users/Dmitry/IdeaProjects/site_search_engine/lib/morphology-1.5.jar</systemPath>
+            <systemPath>${project.basedir}/lib/morphology-1.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene.morphology</groupId>
             <artifactId>russian</artifactId>
             <version>1.5</version>
             <scope>system</scope>
-            <systemPath>C:/Users/Dmitry/IdeaProjects/site_search_engine/lib/russian-1.5.jar</systemPath>
+            <systemPath>${project.basedir}/lib/russian-1.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene.morphology</groupId>
             <artifactId>morph</artifactId>
             <version>1.5</version>
             <scope>system</scope>
-            <systemPath>C:/Users/Dmitry/IdeaProjects/site_search_engine/lib/morph-1.5.jar</systemPath>
+            <systemPath>${project.basedir}/lib/morph-1.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene.morphology</groupId>
             <artifactId>english</artifactId>
             <version>1.5</version>
             <scope>system</scope>
-            <systemPath>C:/Users/Dmitry/IdeaProjects/site_search_engine/lib/english-1.5.jar</systemPath>
+            <systemPath>${project.basedir}/lib/english-1.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene.morphology</groupId>
             <artifactId>dictionary-reader</artifactId>
             <version>1.5</version>
             <scope>system</scope>
-            <systemPath>C:/Users/Dmitry/IdeaProjects/site_search_engine/lib/dictionary-reader-1.5.jar</systemPath>
+            <systemPath>${project.basedir}/lib/dictionary-reader-1.5.jar</systemPath>
         </dependency>
     </dependencies>
 
     <repositories>
         <repository>
             <id>lib</id>
-            <url>file:C:\Users\Dmitry\IdeaProjects\site_search_engine\lib</url>
+            <url>file:${project.basedir}/lib/</url>
         </repository>
     </repositories>
 

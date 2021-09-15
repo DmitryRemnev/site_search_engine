@@ -1,7 +1,4 @@
-import DB.FieldTableWorker;
-import DB.IndexTableWorker;
-import DB.LemmaTableWorker;
-import DB.PageTableWorker;
+import DB.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,7 +15,7 @@ public class ContentHandler {
     private final ArrayList<Field> fields = new ArrayList<>();
 
     ContentHandler() {
-        ResultSet resultSet = FieldTableWorker.getFields();
+        ResultSet resultSet = Utils.getResultSet(Constants.QUERY_SELECT_FIELD);
         if (resultSet != null) {
             try {
                 while (resultSet.next()) {
@@ -31,13 +28,14 @@ public class ContentHandler {
     }
 
     public void toHandle() {
-        ResultSet pageResultSet = PageTableWorker.getPageResultSet();
+        ResultSet pageResultSet = Utils.getResultSet(Constants.QUERY_SELECT_PAGE);
 
         if (pageResultSet != null) {
             try {
                 //int x = 1;
 
                 while (pageResultSet.next()) {
+                    //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK && x == 1) {
                     if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
                         StringBuilder text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();

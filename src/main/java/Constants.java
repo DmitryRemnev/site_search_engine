@@ -24,4 +24,7 @@ public class Constants {
     public static final String WORD_INTERJECTION = "МЕЖД";
     public static final String WORD_DEMONSTRATIVE = "указат";
     public static final String WORD_PREDICATIVE = "ПРЕДК";
+
+    public static final String QUERY_SELECT_FIELD = "SELECT * FROM _field;";
+    public static final String QUERY_SELECT_PAGE = "SELECT * FROM _page;";
 }

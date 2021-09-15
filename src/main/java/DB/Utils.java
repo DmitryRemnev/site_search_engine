@@ -6,13 +6,12 @@ import java.sql.Statement;
 
 import static DB.DBConnection.getConnection;
 
-public class FieldTableWorker {
-    public static final String SQL_QUERY_SELECT = "SELECT * FROM _field;";
+public class Utils {
 
-    public static ResultSet getFields() {
+    public static ResultSet getResultSet(String query) {
         try {
             Statement statement = getConnection().createStatement();
-            if (statement.execute(SQL_QUERY_SELECT)) {
+            if (statement.execute(query)) {
                 try {
                     return statement.getResultSet();
 
