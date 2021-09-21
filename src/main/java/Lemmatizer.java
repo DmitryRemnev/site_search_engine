@@ -2,10 +2,7 @@ import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Lemmatizer {
     public static LuceneMorphology luceneMorph;
@@ -27,6 +24,23 @@ public class Lemmatizer {
         return lemmaAndRatingMap;
     }
 
+    static Set<String> getLemmaSet(String searchQuery) {
+        Set<String> lemmas = new HashSet<>();
+
+        try {
+            luceneMorph = new RussianLuceneMorphology();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (String word : getWords(searchQuery)) {
+            List<String> wordBaseForms = luceneMorph.getNormalForms(word);
+            addToLemmaSet(wordBaseForms, lemmas);
+        }
+
+        return lemmas;
+    }
+
     static List<String> getWords(String text) {
         List<String> list = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
@@ -36,8 +50,9 @@ public class Lemmatizer {
         for (int i = 0; i < text.length(); i++) {
 
             c = text.charAt(i);
+            boolean isMatch = Character.toString(c).matches(Constants.RUSSIAN_LETTERS);
 
-            if (Character.toString(c).matches(Constants.RUSSIAN_LETTERS)) {
+            if (isMatch) {
                 if (isNewString) {
                     builder = new StringBuilder();
                     builder.append(c);
@@ -46,8 +61,9 @@ public class Lemmatizer {
                 } else {
                     builder.append(c);
                 }
+            }
 
-            } else {
+            if (!isMatch || i == (text.length() - 1)) {
                 if (builder.length() > 0 && !isNewString) {
                     String word = builder.toString();
                     if (isAddToWords(word.toLowerCase())) {
@@ -93,5 +109,9 @@ public class Lemmatizer {
                 lemmaAndRatingMap.put(word, weight);
             }
         }
+    }
+
+    private static void addToLemmaSet(List<String> wordBaseForms, Set<String> lemmas) {
+        lemmas.addAll(wordBaseForms);
     }
 }

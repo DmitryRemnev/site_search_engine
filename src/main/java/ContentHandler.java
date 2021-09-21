@@ -35,8 +35,8 @@ public class ContentHandler {
                 //int x = 1;
 
                 while (pageResultSet.next()) {
-                    //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK && x == 1) {
-                    if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
+                    //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK && x == 1 || x == 2 || x == 3) {
+                        if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
                         StringBuilder text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();
                         int pageId = pageResultSet.getInt(Constants.COLUMN_ID);
@@ -57,14 +57,15 @@ public class ContentHandler {
                             if (lemmaResultCount != null) {
                                 lemmaResultCount.last();
 
-                                if (lemmaResultCount.getRow() == 0) {
+                                if (lemmaResultCount.getRow() == Constants.LEMMA_ABSENT) {
                                     lemmaInsert(item.getKey());
-                                    indexInsert(item.getKey(), pageId, item.getValue());
                                 }
 
-                                if (lemmaResultCount.getRow() == 1) {
+                                if (lemmaResultCount.getRow() == Constants.LEMMA_PRESENT) {
                                     lemmaUpdate(item.getKey());
                                 }
+
+                                indexInsert(item.getKey(), pageId, item.getValue());
                             }
                         }
                     }

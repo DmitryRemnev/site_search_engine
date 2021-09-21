@@ -12,6 +12,8 @@ public class Constants {
 
     public static final int CODE_OK = 200;
     public static final int FREQUENCY = 1;
+    public static final int LEMMA_ABSENT = 0;
+    public static final int LEMMA_PRESENT = 1;
     public static final String COLUMN_CODE = "code";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_WEIGHT = "weight";
