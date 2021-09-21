@@ -29,4 +29,7 @@ public class Constants {
 
     public static final String QUERY_SELECT_FIELD = "SELECT * FROM _field;";
     public static final String QUERY_SELECT_PAGE = "SELECT * FROM _page;";
+
+    public static final String COLUMN_FREQUENCY = "frequency";
+    public static final int MAX_FREQUENCY = 20;
 }
