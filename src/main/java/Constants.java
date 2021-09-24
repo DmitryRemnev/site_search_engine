@@ -19,6 +19,7 @@ public class Constants {
     public static final String COLUMN_WEIGHT = "weight";
     public static final String COLUMN_CONTENT = "content";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_RATING = "rating";
 
     public static final String RUSSIAN_LETTERS = "[А-Яа-я]";
     public static final String WORD_UNION = "СОЮЗ";

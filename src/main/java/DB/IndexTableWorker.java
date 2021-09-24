@@ -8,7 +8,7 @@ import static DB.DBConnection.getConnection;
 
 public class IndexTableWorker {
     public static final String SQL_QUERY_INSERT = "INSERT INTO _index(page_id, lemma_id, rating) VALUES (?, ?, ?)";
-    public static final String SQL_QUERY_SELECT_UNION = "SELECT _page.id " +
+    public static final String SQL_QUERY_SELECT_UNION = "SELECT _page.id, _index.rating " +
             "FROM _lemma " +
             "INNER JOIN _index " +
             "ON _lemma.id = _index.lemma_id " +
