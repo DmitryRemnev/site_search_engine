@@ -1,6 +1,7 @@
 package DB;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import static DB.DBConnection.getConnection;
 
 public class PageTableWorker {
     public static final String SQL_QUERY_INSERT = "INSERT INTO _page(path, code, content) VALUES (?, ?, ?)";
+    public static final String SQL_QUERY_SELECT = "SELECT path, content FROM _page WHERE id = ?";
 
     private static final List<String> PATH_LIST = new ArrayList<>();
     private static final List<Integer> CODE_LIST = new ArrayList<>();
@@ -35,5 +37,19 @@ public class PageTableWorker {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ResultSet getResultPage(int pageId) {
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_SELECT);
+            statement.setInt(1, pageId);
+
+            return statement.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

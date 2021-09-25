@@ -6,8 +6,8 @@ import java.util.Map;
 public class Page {
     private final Integer id;
     private final Map<String, Double> lemmaRatingMap;
-    private Double abs;
-    private Double rel;
+    private Double absoluteRelevance;
+    private Double relativeRelevance;
 
     public Page(int id) {
         this.id = id;
@@ -24,5 +24,21 @@ public class Page {
 
     public Map<String, Double> getLemmaRatingMap() {
         return lemmaRatingMap;
+    }
+
+    public void setAbsoluteRelevance(Double absoluteRelevance) {
+        this.absoluteRelevance = absoluteRelevance;
+    }
+
+    public Double getAbsoluteRelevance() {
+        return absoluteRelevance;
+    }
+
+    public void setRelativeRelevance(Double relativeRelevance) {
+        this.relativeRelevance = relativeRelevance;
+    }
+
+    public Double getRelativeRelevance() {
+        return relativeRelevance;
     }
 }

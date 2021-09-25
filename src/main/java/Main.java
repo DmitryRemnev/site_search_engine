@@ -13,11 +13,11 @@ public class Main {
         System.out.println("Введите запрос: ");
         String searchQuery = scanner.nextLine();
 
-        /*new ForkJoinPool().invoke(new SiteRecursiveAction(new Site(Constants.BASE_URL)));
+        new ForkJoinPool().invoke(new SiteRecursiveAction(new Site(Constants.BASE_URL)));
         PageTableWorker.executeMultiInsert();
 
         ContentHandler contentHandler = new ContentHandler();
-        contentHandler.toHandle();*/
+        contentHandler.toHandle();
 
         SearchQueryHandler queryHandler = new SearchQueryHandler();
         queryHandler.toHandle(searchQuery);

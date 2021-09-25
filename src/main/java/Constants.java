@@ -17,6 +17,7 @@ public class Constants {
     public static final String COLUMN_CODE = "code";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_WEIGHT = "weight";
+    public static final String COLUMN_PATH = "path";
     public static final String COLUMN_CONTENT = "content";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_RATING = "rating";
@@ -33,4 +34,7 @@ public class Constants {
 
     public static final String COLUMN_FREQUENCY = "frequency";
     public static final int MAX_FREQUENCY = 20;
+
+    public static final String NO_MATCHES_FOUND = "Совпадений не найдено!";
+    public static final String TAG_B = "b";
 }

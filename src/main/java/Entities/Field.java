@@ -1,8 +1,10 @@
+package Entities;
+
 public class Field {
     private final String name;
     private final double weight;
 
-    Field(String name, float weight) {
+    public Field(String name, float weight) {
         this.name = name;
         this.weight = weight;
     }
