@@ -15,7 +15,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
         //long start = System.currentTimeMillis();
 
-        Scanner scanner = new Scanner(System.in);
+        /*Scanner scanner = new Scanner(System.in);
         System.out.println("Введите запрос: ");
         String searchQuery = scanner.nextLine();
 
@@ -26,7 +26,7 @@ public class Main {
         contentHandler.toHandle();
 
         SearchQueryHandler queryHandler = new SearchQueryHandler();
-        queryHandler.toHandle(searchQuery);
+        queryHandler.toHandle(searchQuery);*/
 
         DBConnection.closeConnection();
         //System.out.println(System.currentTimeMillis() - start);

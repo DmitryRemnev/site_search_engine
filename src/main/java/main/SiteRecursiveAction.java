@@ -6,6 +6,8 @@ import java.util.concurrent.RecursiveAction;
 public class SiteRecursiveAction extends RecursiveAction {
     private final Site site;
     private final Set<String> allUrls;
+    private final TaskManager taskManager = new TaskManager();
+    public static boolean isCancel = false;
 
     public SiteRecursiveAction(Site site) {
         this.site = site;
@@ -32,6 +34,12 @@ public class SiteRecursiveAction extends RecursiveAction {
             SiteRecursiveAction task = new SiteRecursiveAction(new Site(link), allUrls);
             task.fork();
             taskList.add(task);
+            taskManager.addTask(task);
+
+            if (isCancel) {
+                taskManager.cancelTask(this);
+                taskManager.cancelAllTasks(this);
+            }
 
             try {
                 Thread.sleep(Constants.THREAD_SLEEP);
