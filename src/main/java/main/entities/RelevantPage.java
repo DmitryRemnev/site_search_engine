@@ -1,4 +1,4 @@
-package Entities;
+package main.entities;
 
 public class RelevantPage {
     String uri;

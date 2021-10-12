@@ -1,10 +1,10 @@
-package DB;
+package main.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static DB.DBConnection.getConnection;
+import static main.db.DBConnection.getConnection;
 
 public class LemmaTableWorker {
     public static final String SQL_QUERY_SELECT = "SELECT * FROM _lemma WHERE lemma = ?";

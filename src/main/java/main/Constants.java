@@ -1,3 +1,5 @@
+package main;
+
 public class Constants {
     public static final String BASE_URL = "https://et-cetera.ru/mobile/";
 

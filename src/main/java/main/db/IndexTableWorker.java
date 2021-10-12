@@ -1,10 +1,10 @@
-package DB;
+package main.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static DB.DBConnection.getConnection;
+import static main.db.DBConnection.getConnection;
 
 public class IndexTableWorker {
     public static final String SQL_QUERY_INSERT = "INSERT INTO _index(page_id, lemma_id, rating) VALUES (?, ?, ?)";

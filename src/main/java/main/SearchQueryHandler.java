@@ -1,8 +1,10 @@
-import DB.IndexTableWorker;
-import DB.LemmaTableWorker;
-import DB.PageTableWorker;
-import Entities.Page;
-import Entities.RelevantPage;
+package main;
+
+import main.db.IndexTableWorker;
+import main.db.LemmaTableWorker;
+import main.db.PageTableWorker;
+import main.entities.Page;
+import main.entities.RelevantPage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

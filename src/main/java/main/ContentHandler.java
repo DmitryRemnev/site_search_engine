@@ -1,6 +1,8 @@
-import DB.*;
+package main;
 
-import Entities.Field;
+import main.db.*;
+
+import main.entities.Field;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,7 +38,7 @@ public class ContentHandler {
                 //int x = 1;
 
                 while (pageResultSet.next()) {
-                    //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK && x == 1 || x == 2 || x == 3) {
+                    //if (pageResultSet.getInt(main.Constants.COLUMN_CODE) == main.Constants.CODE_OK && x == 1 || x == 2 || x == 3) {
                         if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
                         StringBuilder text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();

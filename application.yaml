@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/search_engine?serverTimezone=UTC&useSSL=false
+    username: root
+    password: Tgb10Ujm73
+
+sites:
+  - url: https://et-cetera.ru/mobile/
+    name: Centra
+
+user_agent: SearchBot

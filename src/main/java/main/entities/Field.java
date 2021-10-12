@@ -1,4 +1,4 @@
-package Entities;
+package main.entities;
 
 public class Field {
     private final String name;

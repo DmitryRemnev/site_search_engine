@@ -1,4 +1,6 @@
-import Entities.Page;
+package main;
+
+import main.entities.Page;
 
 import java.util.Comparator;
 

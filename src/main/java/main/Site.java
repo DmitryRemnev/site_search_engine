@@ -1,4 +1,6 @@
-import DB.PageTableWorker;
+package main;
+
+import main.db.PageTableWorker;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
