@@ -2,20 +2,21 @@ package main;
 
 import java.util.*;
 import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SiteRecursiveAction extends RecursiveAction {
-    private final Site site;
+    private final SiteHandler siteHandler;
     private final Set<String> allUrls;
     private final TaskManager taskManager = new TaskManager();
-    public static boolean isCancel = false;
+    public AtomicBoolean isCancel = new AtomicBoolean(false);
 
-    public SiteRecursiveAction(Site site) {
-        this.site = site;
+    public SiteRecursiveAction(SiteHandler siteHandler) {
+        this.siteHandler = siteHandler;
         allUrls = Collections.synchronizedSet(new HashSet<>());
     }
 
-    public SiteRecursiveAction(Site site, Set<String> allUrls) {
-        this.site = site;
+    public SiteRecursiveAction(SiteHandler siteHandler, Set<String> allUrls) {
+        this.siteHandler = siteHandler;
         this.allUrls = allUrls;
     }
 
@@ -23,7 +24,7 @@ public class SiteRecursiveAction extends RecursiveAction {
     protected void compute() {
         List<SiteRecursiveAction> taskList = new ArrayList<>();
 
-        for (String link : site.getUrls()) {
+        for (String link : siteHandler.getUrls()) {
 
             synchronized (allUrls) {
                 if (isNotAdd(link, allUrls)) {
@@ -31,12 +32,12 @@ public class SiteRecursiveAction extends RecursiveAction {
                 }
                 allUrls.add(link);
             }
-            SiteRecursiveAction task = new SiteRecursiveAction(new Site(link), allUrls);
+            SiteRecursiveAction task = new SiteRecursiveAction(new SiteHandler(link), allUrls);
             task.fork();
             taskList.add(task);
             taskManager.addTask(task);
 
-            if (isCancel) {
+            if (isCancel.get()) {
                 taskManager.cancelTask(this);
                 taskManager.cancelAllTasks(this);
             }

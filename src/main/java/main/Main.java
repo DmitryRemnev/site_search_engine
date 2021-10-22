@@ -5,7 +5,6 @@ import main.db.PageTableWorker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Scanner;
 import java.util.concurrent.ForkJoinPool;
 
 @SpringBootApplication
@@ -19,7 +18,7 @@ public class Main {
         System.out.println("Введите запрос: ");
         String searchQuery = scanner.nextLine();
 
-        new ForkJoinPool().invoke(new SiteRecursiveAction(new Site(Constants.BASE_URL)));
+        new ForkJoinPool().invoke(new SiteRecursiveAction(new SiteHandler(Constants.BASE_URL)));
         PageTableWorker.executeMultiInsert();
 
         ContentHandler contentHandler = new ContentHandler();

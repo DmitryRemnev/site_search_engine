@@ -9,14 +9,14 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Site {
+public class SiteHandler {
 
     private final String url;
     private final List<String> urls = new ArrayList<>();
     private Document document;
     private Connection connect;
 
-    public Site(String url) {
+    public SiteHandler(String url) {
         this.url = url;
     }
 
