@@ -4,36 +4,25 @@ import main.db.DBConnection;
 import main.db.PageTableWorker;
 import main.entities.Site;
 import main.entities.YamlConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 @RestController
 public class SearchController {
     private SiteRecursiveAction siteRecursiveAction;
-    private List<Site> sites;
+    private final List<Site> sites;
     private boolean isRunning = false;
 
     public SearchController() {
-        Representer representer = new Representer();
-        representer.getPropertyUtils().setSkipMissingProperties(true);
-
-        Yaml yaml = new Yaml(new Constructor(YamlConfig.class), representer);
-
-        InputStream inputStream = this
-                .getClass()
-                .getClassLoader()
-                .getResourceAsStream("config/application.yaml");
-
-        YamlConfig config = yaml.load(inputStream);
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        YamlConfig config = context.getBean(YamlConfig.class);
         sites = config.getSites();
     }
 
@@ -74,6 +63,11 @@ public class SearchController {
 
     @PostMapping("/api/indexPage")
     public ResponseEntity<String> addingOrUpdatingSinglePage(String url) {
+        /*System.out.println(url);
+
+        for (Site site : sites) {
+            System.out.println(site.getName() + " - " + site.getUrl());
+        }*/
 
         return ResponseEntity.ok("true");
     }
