@@ -63,11 +63,17 @@ public class SearchController {
 
     @PostMapping("/api/indexPage")
     public ResponseEntity<String> addingOrUpdatingSinglePage(String url) {
-        /*System.out.println(url);
+        System.out.println(url);
 
         for (Site site : sites) {
             System.out.println(site.getName() + " - " + site.getUrl());
-        }*/
+        }
+
+        return ResponseEntity.ok("true");
+    }
+
+    @GetMapping("/api/statistics")
+    public ResponseEntity<String> getStatistics() {
 
         return ResponseEntity.ok("true");
     }
