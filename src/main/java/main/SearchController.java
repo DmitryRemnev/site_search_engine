@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 @RestController
 public class SearchController {
-    private SiteRecursiveAction siteRecursiveAction;
+    private final List<PageRecursiveAction> actionsList;
     private final List<Site> sites;
     private boolean isRunning = false;
 
@@ -24,6 +25,7 @@ public class SearchController {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         YamlConfig config = context.getBean(YamlConfig.class);
         sites = config.getSites();
+        actionsList = new ArrayList<>();
     }
 
     @GetMapping("/api/startIndexing")
@@ -36,10 +38,13 @@ public class SearchController {
             isRunning = true;
 
             DBConnection.cleanDatabase();
-            siteRecursiveAction = new SiteRecursiveAction(new SiteHandler(Constants.BASE_URL));
-            new ForkJoinPool().invoke(siteRecursiveAction);
-            PageTableWorker.executeMultiInsert();
-            new ContentHandler().toHandle();
+            for (Site site : sites) {
+                var pageRecursiveAction = new PageRecursiveAction(new PageHandler(site.getUrl(), site.getName()));
+                actionsList.add(pageRecursiveAction);
+                new SiteHandler(pageRecursiveAction, site).start();
+            }
+            //PageTableWorker.executeMultiInsert();
+            //new ContentHandler().toHandle();
 
             isRunning = false;
 
@@ -54,7 +59,9 @@ public class SearchController {
             return ResponseEntity.badRequest().body("Индексация не запущена");
 
         } else {
-            siteRecursiveAction.isCancel.set(true);
+            for (PageRecursiveAction pageRecursiveAction : actionsList) {
+                pageRecursiveAction.isCancel.set(true);
+            }
 
             isRunning = false;
             return ResponseEntity.ok("true");
@@ -75,6 +82,14 @@ public class SearchController {
     @GetMapping("/api/statistics")
     public ResponseEntity<String> getStatistics() {
 
+        System.out.println("STATISTICS");
+        return ResponseEntity.ok("true");
+    }
+
+    @GetMapping("/api/search")
+    public ResponseEntity<String> getSearch() {
+
+        System.out.println("SEARCH");
         return ResponseEntity.ok("true");
     }
 }

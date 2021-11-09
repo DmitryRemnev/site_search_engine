@@ -4,27 +4,27 @@ import java.util.*;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SiteRecursiveAction extends RecursiveAction {
-    private final SiteHandler siteHandler;
+public class PageRecursiveAction extends RecursiveAction {
+    private final PageHandler pageHandler;
     private final Set<String> allUrls;
     private final TaskManager taskManager = new TaskManager();
     public AtomicBoolean isCancel = new AtomicBoolean(false);
 
-    public SiteRecursiveAction(SiteHandler siteHandler) {
-        this.siteHandler = siteHandler;
+    public PageRecursiveAction(PageHandler pageHandler) {
+        this.pageHandler = pageHandler;
         allUrls = Collections.synchronizedSet(new HashSet<>());
     }
 
-    public SiteRecursiveAction(SiteHandler siteHandler, Set<String> allUrls) {
-        this.siteHandler = siteHandler;
+    public PageRecursiveAction(PageHandler pageHandler, Set<String> allUrls) {
+        this.pageHandler = pageHandler;
         this.allUrls = allUrls;
     }
 
     @Override
     protected void compute() {
-        List<SiteRecursiveAction> taskList = new ArrayList<>();
+        List<PageRecursiveAction> taskList = new ArrayList<>();
 
-        for (String link : siteHandler.getUrls()) {
+        for (String link : pageHandler.getUrls()) {
 
             synchronized (allUrls) {
                 if (isNotAdd(link, allUrls)) {
@@ -32,7 +32,7 @@ public class SiteRecursiveAction extends RecursiveAction {
                 }
                 allUrls.add(link);
             }
-            SiteRecursiveAction task = new SiteRecursiveAction(new SiteHandler(link), allUrls);
+            var task = new PageRecursiveAction(new PageHandler(link, pageHandler.getSiteName()), allUrls);
             task.fork();
             taskList.add(task);
             taskManager.addTask(task);
@@ -49,7 +49,7 @@ public class SiteRecursiveAction extends RecursiveAction {
             }
         }
 
-        for (SiteRecursiveAction task : taskList) {
+        for (PageRecursiveAction task : taskList) {
             task.join();
         }
     }

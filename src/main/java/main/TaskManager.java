@@ -5,26 +5,26 @@ import java.util.List;
 
 public class TaskManager {
 
-    private final List<SiteRecursiveAction> taskList;
+    private final List<PageRecursiveAction> taskList;
 
     public TaskManager() {
         taskList = new ArrayList<>();
     }
 
-    public void addTask(SiteRecursiveAction task) {
+    public void addTask(PageRecursiveAction task) {
         taskList.add(task);
     }
 
-    public void cancelTask(SiteRecursiveAction cancelTask) {
-        for (SiteRecursiveAction task : taskList) {
+    public void cancelTask(PageRecursiveAction cancelTask) {
+        for (PageRecursiveAction task : taskList) {
             if (task == cancelTask) {
                 task.cancel(true);
             }
         }
     }
 
-    public void cancelAllTasks(SiteRecursiveAction cancelTask) {
-        for (SiteRecursiveAction task : taskList) {
+    public void cancelAllTasks(PageRecursiveAction cancelTask) {
+        for (PageRecursiveAction task : taskList) {
             if (task != cancelTask) {
                 task.cancel(true);
             }

@@ -18,7 +18,7 @@ public class Main {
         System.out.println("Введите запрос: ");
         String searchQuery = scanner.nextLine();
 
-        new ForkJoinPool().invoke(new SiteRecursiveAction(new SiteHandler(Constants.BASE_URL)));
+        new ForkJoinPool().invoke(new PageRecursiveAction(new PageHandler(Constants.BASE_URL)));
         PageTableWorker.executeMultiInsert();
 
         ContentHandler contentHandler = new ContentHandler();
