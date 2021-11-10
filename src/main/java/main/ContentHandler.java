@@ -16,8 +16,11 @@ import java.util.Map;
 
 public class ContentHandler {
     private final ArrayList<Field> fields = new ArrayList<>();
+    private final int siteId;
 
-    ContentHandler() {
+    ContentHandler(int siteId) {
+        this.siteId = siteId;
+
         ResultSet resultSet = Utils.getResultSet(Constants.QUERY_SELECT_FIELD);
         if (resultSet != null) {
             try {
@@ -35,11 +38,11 @@ public class ContentHandler {
 
         if (pageResultSet != null) {
             try {
-                //int x = 1;
+                int x = 1;
 
                 while (pageResultSet.next()) {
-                    //if (pageResultSet.getInt(main.Constants.COLUMN_CODE) == main.Constants.CODE_OK && x == 1 || x == 2 || x == 3) {
-                        if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
+                    if (pageResultSet.getInt(main.Constants.COLUMN_CODE) == main.Constants.CODE_OK && x == 1 || x == 2 || x == 3) {
+                        //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
                         StringBuilder text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();
                         int pageId = pageResultSet.getInt(Constants.COLUMN_ID);
@@ -72,7 +75,7 @@ public class ContentHandler {
                             }
                         }
                     }
-                    //x++;
+                    x++;
                 }
 
             } catch (SQLException e) {
@@ -103,7 +106,7 @@ public class ContentHandler {
     }
 
     private void lemmaInsert(String lemma) {
-        LemmaTableWorker.executeInsert(lemma, Constants.FREQUENCY);
+        LemmaTableWorker.executeInsert(lemma, Constants.FREQUENCY, siteId);
     }
 
     private void lemmaUpdate(String lemma) {

@@ -20,9 +20,10 @@ public class SiteHandler extends Thread {
 
     public void run() {
         addSiteRecord();
-        pageRecursiveAction.getPageHandler().setSiteId(getSiteId());
+        int siteId = getSiteId();
+        pageRecursiveAction.getPageHandler().setSiteId(siteId);
         new ForkJoinPool().invoke(pageRecursiveAction);
-        //new ContentHandler().toHandle();
+        new ContentHandler(siteId).toHandle();
         updateSiteRecord();
     }
 

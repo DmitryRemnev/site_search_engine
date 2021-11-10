@@ -41,7 +41,6 @@ public class DBConnection {
             statement.executeUpdate(SQL_TRUNCATE + "_page");
             statement.executeUpdate(SQL_TRUNCATE + "_lemma");
             statement.executeUpdate(SQL_TRUNCATE + "_index");
-            statement.executeUpdate(SQL_TRUNCATE + "_field");
             statement.executeUpdate(SQL_TRUNCATE + "_site");
 
         } catch (SQLException e) {
