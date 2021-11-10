@@ -13,17 +13,32 @@ import java.util.List;
 public class PageHandler {
     private final String url;
     private final String siteName;
+    private final String baseUrl;
+    private int siteId;
     private final List<String> urls = new ArrayList<>();
     private Document document;
     private Connection connect;
 
-    public PageHandler(String url, String siteName) {
+    public PageHandler(String url, String siteName, String baseUrl) {
         this.url = url;
         this.siteName = siteName;
+        this.baseUrl = baseUrl;
     }
 
     public String getSiteName() {
         return siteName;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public int getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(int siteId) {
+        this.siteId = siteId;
     }
 
     public List<String> getUrls() {
@@ -52,10 +67,12 @@ public class PageHandler {
     }
 
     private void addLine() {
-        PageTableWorker.addLine(url.replace(Constants.BASE_URL, Constants.SLASH),
+        PageTableWorker.pageInsert(url.replace(baseUrl, Constants.SLASH),
                 connect.response().statusCode(),
-                document.html());
+                document.html(),
+                getSiteId());
     }
+
     private void failedSiteRecord(String error) {
         SiteTableWorker.failedUpdate(Status.FAILED.getName(), error, siteName);
     }

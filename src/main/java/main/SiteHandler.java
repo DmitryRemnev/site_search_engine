@@ -1,11 +1,13 @@
 package main;
 
 import main.db.SiteTableWorker;
-import main.db.Utils;
 import main.entities.Site;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ForkJoinPool;
 
 public class SiteHandler extends Thread {
     private final PageRecursiveAction pageRecursiveAction;
@@ -18,7 +20,9 @@ public class SiteHandler extends Thread {
 
     public void run() {
         addSiteRecord();
-        //new ForkJoinPool().invoke(pageRecursiveAction);
+        pageRecursiveAction.getPageHandler().setSiteId(getSiteId());
+        new ForkJoinPool().invoke(pageRecursiveAction);
+        //new ContentHandler().toHandle();
         updateSiteRecord();
     }
 
@@ -27,13 +31,29 @@ public class SiteHandler extends Thread {
     }
 
     private String getDate() {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        var format = new SimpleDateFormat(Constants.DATE_FORMAT);
 
-        return format.format(date);
+        return format.format(new Date());
     }
 
     private void updateSiteRecord() {
         SiteTableWorker.executeUpdate(Status.INDEXED.getName(), site.getName());
+    }
+
+    private int getSiteId() {
+        ResultSet siteResultSet = SiteTableWorker.getSiteId(site.getName());
+
+        if (siteResultSet != null) {
+            try {
+                while (siteResultSet.next()) {
+                    return siteResultSet.getInt(Constants.COLUMN_ID);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0;
     }
 }

@@ -20,6 +20,10 @@ public class PageRecursiveAction extends RecursiveAction {
         this.allUrls = allUrls;
     }
 
+    public PageHandler getPageHandler() {
+        return pageHandler;
+    }
+
     @Override
     protected void compute() {
         List<PageRecursiveAction> taskList = new ArrayList<>();
@@ -32,7 +36,11 @@ public class PageRecursiveAction extends RecursiveAction {
                 }
                 allUrls.add(link);
             }
-            var task = new PageRecursiveAction(new PageHandler(link, pageHandler.getSiteName()), allUrls);
+
+            var page = new PageHandler(link, pageHandler.getSiteName(), pageHandler.getBaseUrl());
+            page.setSiteId(pageHandler.getSiteId());
+            var task = new PageRecursiveAction(page, allUrls);
+
             task.fork();
             taskList.add(task);
             taskManager.addTask(task);

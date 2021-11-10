@@ -39,4 +39,6 @@ public class Constants {
 
     public static final String NO_MATCHES_FOUND = "Совпадений не найдено!";
     public static final String TAG_B = "b";
+
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 }

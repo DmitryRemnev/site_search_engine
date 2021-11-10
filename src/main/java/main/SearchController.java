@@ -1,7 +1,6 @@
 package main;
 
 import main.db.DBConnection;
-import main.db.PageTableWorker;
 import main.entities.Site;
 import main.entities.YamlConfig;
 import org.springframework.context.ApplicationContext;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
 
 @RestController
 public class SearchController {
@@ -39,12 +37,11 @@ public class SearchController {
 
             DBConnection.cleanDatabase();
             for (Site site : sites) {
-                var pageRecursiveAction = new PageRecursiveAction(new PageHandler(site.getUrl(), site.getName()));
+                var pageRecursiveAction = new PageRecursiveAction(
+                        new PageHandler(site.getUrl(), site.getName(), site.getUrl()));
                 actionsList.add(pageRecursiveAction);
                 new SiteHandler(pageRecursiveAction, site).start();
             }
-            //PageTableWorker.executeMultiInsert();
-            //new ContentHandler().toHandle();
 
             isRunning = false;
 

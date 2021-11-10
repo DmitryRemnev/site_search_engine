@@ -1,6 +1,7 @@
 package main.db;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static main.db.DBConnection.getConnection;
@@ -10,10 +11,10 @@ public class SiteTableWorker {
             "VALUES (?, ?, ?, ?)";
     public static final String SQL_QUERY_UPDATE = "UPDATE _site SET status = ? WHERE name = ?";
     public static final String SQL_QUERY_FAILED = "UPDATE _site SET status = ?, last_error = ? WHERE name = ?";
+    public static final String SQL_QUERY_ID = "SELECT id FROM _site WHERE name = ?";
 
     public static void executeInsert(String status, String statusTime, String url, String name) {
-        try {
-            PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_INSERT);
+        try (PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_INSERT)) {
             statement.setString(1, status);
             statement.setString(2, statusTime);
             statement.setString(3, url);
@@ -26,8 +27,7 @@ public class SiteTableWorker {
     }
 
     public static void executeUpdate(String status, String name) {
-        try {
-            PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_UPDATE);
+        try (PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_UPDATE)) {
             statement.setString(1, status);
             statement.setString(2, name);
             statement.executeUpdate();
@@ -38,8 +38,7 @@ public class SiteTableWorker {
     }
 
     public static void failedUpdate(String status, String message, String name) {
-        try {
-            PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_FAILED);
+        try (PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_FAILED)) {
             statement.setString(1, status);
             statement.setString(2, message);
             statement.setString(3, name);
@@ -48,5 +47,16 @@ public class SiteTableWorker {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ResultSet getSiteId(String name) {
+        try (PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_ID);) {
+            statement.setString(1, name);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
