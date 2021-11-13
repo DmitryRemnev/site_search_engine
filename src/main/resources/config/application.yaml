@@ -5,6 +5,8 @@ spring:
     password: Tgb10Ujm73
 
 sites:
+  - url: http://srpp63.ru/
+    name: Steamer
   - url: https://et-cetera.ru/mobile/
     name: Centra
 

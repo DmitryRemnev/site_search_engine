@@ -50,8 +50,11 @@ public class SiteTableWorker {
     }
 
     public static ResultSet getSiteId(String name) {
-        try (PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_ID);) {
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(SQL_QUERY_ID);
             statement.setString(1, name);
+
+            return statement.executeQuery();
 
         } catch (SQLException e) {
             e.printStackTrace();

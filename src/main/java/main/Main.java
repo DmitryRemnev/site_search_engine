@@ -12,7 +12,6 @@ public class Main {
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        //long start = System.currentTimeMillis();
 
         /*Scanner scanner = new Scanner(System.in);
         System.out.println("Введите запрос: ");
@@ -28,6 +27,5 @@ public class Main {
         queryHandler.toHandle(searchQuery);*/
 
         DBConnection.closeConnection();
-        //System.out.println(System.currentTimeMillis() - start);
     }
 }

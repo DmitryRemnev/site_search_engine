@@ -19,12 +19,14 @@ public class SiteHandler extends Thread {
     }
 
     public void run() {
+        long start = System.currentTimeMillis();
         addSiteRecord();
         int siteId = getSiteId();
         pageRecursiveAction.getPageHandler().setSiteId(siteId);
         new ForkJoinPool().invoke(pageRecursiveAction);
         new ContentHandler(siteId).toHandle();
         updateSiteRecord();
+        System.out.println(siteId + " " + (System.currentTimeMillis() - start));
     }
 
     private void addSiteRecord() {

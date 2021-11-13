@@ -27,7 +27,7 @@ public class SearchQueryHandler {
 
     public void toHandle(String searchQuery) {
         lemmas = Lemmatizer.getLemmaSet(searchQuery);
-        fillingMap();
+        //fillingMap();
         sortingList();
         searchingPages();
 
@@ -51,7 +51,7 @@ public class SearchQueryHandler {
         }
     }
 
-    private void fillingMap() {
+    /*private void fillingMap() {
         unsortedMap = new HashMap<>();
 
         for (String lemma : lemmas) {
@@ -72,7 +72,7 @@ public class SearchQueryHandler {
                 }
             }
         }
-    }
+    }*/
 
     private void sortingList() {
         sortedList = unsortedMap.

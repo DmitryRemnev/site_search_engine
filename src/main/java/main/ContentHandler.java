@@ -34,18 +34,17 @@ public class ContentHandler {
     }
 
     public void toHandle() {
-        ResultSet pageResultSet = Utils.getResultSet(Constants.QUERY_SELECT_PAGE);
+        ResultSet pageResultSet = PageTableWorker.getResultSet(siteId);
 
         if (pageResultSet != null) {
             try {
                 int x = 1;
 
                 while (pageResultSet.next()) {
-                    if (pageResultSet.getInt(main.Constants.COLUMN_CODE) == main.Constants.CODE_OK && x == 1 || x == 2 || x == 3) {
+                    if (pageResultSet.getInt(main.Constants.COLUMN_CODE) == main.Constants.CODE_OK && x == 1) {
                         //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
-                        StringBuilder text = new StringBuilder();
+                        var text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();
-                        int pageId = pageResultSet.getInt(Constants.COLUMN_ID);
 
                         for (Field field : fields) {
                             try {
@@ -57,9 +56,10 @@ public class ContentHandler {
                             }
                         }
 
+                        int pageId = pageResultSet.getInt(Constants.COLUMN_ID);
                         for (Map.Entry<String, Double> item : lemmaMap.entrySet()) {
 
-                            ResultSet lemmaResultCount = LemmaTableWorker.getResultLemma(item.getKey());
+                            ResultSet lemmaResultCount = LemmaTableWorker.getResultLemma(item.getKey(), siteId);
                             if (lemmaResultCount != null) {
                                 lemmaResultCount.last();
 
@@ -110,11 +110,11 @@ public class ContentHandler {
     }
 
     private void lemmaUpdate(String lemma) {
-        LemmaTableWorker.executeUpdate(lemma);
+        LemmaTableWorker.executeUpdate(lemma, siteId);
     }
 
     private void indexInsert(String lemma, int pageId, double rating) {
-        ResultSet lemmaResultSet = LemmaTableWorker.getResultLemma(lemma);
+        ResultSet lemmaResultSet = LemmaTableWorker.getResultLemma(lemma, siteId);
 
         if (lemmaResultSet != null) {
             try {
