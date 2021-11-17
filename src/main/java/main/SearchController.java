@@ -3,8 +3,10 @@ package main;
 import main.db.DBConnection;
 import main.entities.Site;
 import main.entities.YamlConfig;
+import main.entities.statistics.Statistics;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +53,7 @@ public class SearchController {
 
     @GetMapping("/api/stopIndexing")
     public ResponseEntity<String> stopCurrentIndexing() {
+        System.out.println("STOP");
 
         if (!isRunning) {
             return ResponseEntity.badRequest().body("Индексация не запущена");
@@ -77,10 +80,10 @@ public class SearchController {
     }
 
     @GetMapping("/api/statistics")
-    public ResponseEntity<String> getStatistics() {
+    public ResponseEntity<Statistics> getStatistics() {
 
         System.out.println("STATISTICS");
-        return ResponseEntity.ok("true");
+        return new ResponseEntity<>(StatisticsHandler.getStatistics(), HttpStatus.OK);
     }
 
     @GetMapping("/api/search")

@@ -23,6 +23,10 @@ public class Constants {
     public static final String COLUMN_CONTENT = "content";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_RATING = "rating";
+    public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_URL = "url";
+    public static final String COLUMN_LAST_ERROR = "last_error";
+    public static final String COLUMN_STATUS_TIME = "status_time";
 
     public static final String RUSSIAN_LETTERS = "[А-Яа-я]";
     public static final String WORD_UNION = "СОЮЗ";

@@ -1,5 +1,6 @@
 package main.db;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +20,20 @@ public class Utils {
                     e.printStackTrace();
                 }
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ResultSet getResultCount(String query, int id) {
+        try {
+            PreparedStatement statement = getConnection().prepareStatement(query);
+            statement.setInt(1, id);
+
+            return statement.executeQuery();
 
         } catch (SQLException e) {
             e.printStackTrace();
