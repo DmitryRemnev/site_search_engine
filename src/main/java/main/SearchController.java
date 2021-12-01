@@ -8,9 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,16 +66,19 @@ public class SearchController {
         }
     }
 
-    @PostMapping("/api/indexPage")
-    public ResponseEntity<String> addingOrUpdatingSinglePage(String url) {
-        System.out.println(url);
+    /*@PostMapping("/api/indexPage")
+    public ResponseEntity<String> addingOrUpdatingSinglePage(@RequestParam("indexPage") String indexPage) {
+        var singlePageHandler = new SinglePageHandler(sites, page);
 
-        for (Site site : sites) {
-            System.out.println(site.getName() + " - " + site.getUrl());
+        if (singlePageHandler.isUrlPresent()) {
+            return ResponseEntity.ok("true");
+        } else {
+            return ResponseEntity.badRequest().body("Данная страница находится за пределами сайтов, " +
+                    "указанных в конфигурационном файле");
         }
-
+        System.out.println(indexPage);
         return ResponseEntity.ok("true");
-    }
+    }*/
 
     @GetMapping("/api/statistics")
     public ResponseEntity<Statistics> getStatistics() {
