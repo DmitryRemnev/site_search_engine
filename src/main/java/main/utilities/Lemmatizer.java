@@ -1,6 +1,6 @@
-package main;
+package main.utilities;
 
-import main.Constants;
+import main.constants.Constants;
 import org.apache.lucene.morphology.LuceneMorphology;
 import org.apache.lucene.morphology.russian.RussianLuceneMorphology;
 
@@ -10,7 +10,7 @@ import java.util.*;
 public class Lemmatizer {
     public static LuceneMorphology luceneMorph;
 
-    static Map<String, Double> getLemmaAndRatingMap(String text, Double weight) {
+    public static Map<String, Double> getLemmaAndRatingMap(String text, Double weight) {
         Map<String, Double> lemmaAndRatingMap = new HashMap<>();
 
         try {
@@ -27,7 +27,7 @@ public class Lemmatizer {
         return lemmaAndRatingMap;
     }
 
-    static Set<String> getLemmaSet(String searchQuery) {
+    public static Set<String> getLemmaSet(String searchQuery) {
         Set<String> lemmas = new HashSet<>();
 
         try {

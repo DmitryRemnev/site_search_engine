@@ -1,4 +1,4 @@
-package main;
+package main.constants;
 
 public class Constants {
     public static final String BASE_URL = "https://et-cetera.ru/mobile/";
@@ -44,4 +44,19 @@ public class Constants {
     public static final String TAG_B = "b";
 
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    public static final String QUERY_SITES_COUNT = "SELECT count(*) AS sitesCount FROM _site";
+    public static final String QUERY_PAGES_COUNT = "SELECT count(*) AS pagesCount FROM _page";
+    public static final String QUERY_LEMMAS_COUNT = "SELECT count(*) AS lemmasCount FROM _lemma";
+    public static final String QUERY_STATUS = "SELECT status FROM _site";
+    public static final String COLUMN_LABEL_SITES = "sitesCount";
+    public static final String COLUMN_LABEL_PAGES = "pagesCount";
+    public static final String COLUMN_LABEL_LEMMAS = "lemmasCount";
+    public static final String QUERY_SITES_ALL = "SELECT * FROM _site";
+    public static final String QUERY_PAGES_COUNT_DETAILED = "SELECT count(*) AS pagesCountDetailed" +
+            " FROM _page WHERE site_id = ?";
+    public static final String QUERY_LEMMAS_COUNT_DETAILED = "SELECT count(*) AS lemmasCountDetailed" +
+            " FROM _lemma WHERE site_id = ?";
+    public static final String COLUMN_PAGES_COUNT = "pagesCountDetailed";
+    public static final String COLUMN_LEMMAS_COUNT = "lemmasCountDetailed";
 }

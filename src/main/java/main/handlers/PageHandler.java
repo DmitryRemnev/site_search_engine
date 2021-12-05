@@ -1,7 +1,9 @@
-package main;
+package main.handlers;
 
-import main.db.PageTableWorker;
-import main.db.SiteTableWorker;
+import main.constants.Constants;
+import main.enums.Status;
+import main.database.PageTableWorker;
+import main.database.SiteTableWorker;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

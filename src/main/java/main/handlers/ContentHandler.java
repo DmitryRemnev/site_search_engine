@@ -1,8 +1,10 @@
-package main;
+package main.handlers;
 
-import main.db.*;
+import main.constants.Constants;
+import main.database.*;
 
 import main.entities.Field;
+import main.utilities.Lemmatizer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -41,7 +43,7 @@ public class ContentHandler {
                 int x = 1;
 
                 while (pageResultSet.next()) {
-                    if (pageResultSet.getInt(main.Constants.COLUMN_CODE) == main.Constants.CODE_OK && x == 1) {
+                    if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK && x == 1) {
                         //if (pageResultSet.getInt(Constants.COLUMN_CODE) == Constants.CODE_OK) {
                         var text = new StringBuilder();
                         Map<String, Double> lemmaMap = new HashMap<>();

@@ -1,4 +1,4 @@
-package main;
+package main.config;
 
 import main.entities.YamlConfig;
 import org.springframework.context.annotation.Bean;

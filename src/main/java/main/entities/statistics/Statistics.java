@@ -1,8 +1,10 @@
 package main.entities.statistics;
 
+import java.util.List;
+
 public class Statistics {
     private Total total;
-    private Detailed detailed;
+    private List<SiteDetailed> detailed;
 
     public Statistics() {
     }
@@ -15,11 +17,11 @@ public class Statistics {
         this.total = total;
     }
 
-    public Detailed getDetailed() {
+    public List<SiteDetailed> getDetailed() {
         return detailed;
     }
 
-    public void setDetailed(Detailed detailed) {
+    public void setDetailed(List<SiteDetailed> detailed) {
         this.detailed = detailed;
     }
 }

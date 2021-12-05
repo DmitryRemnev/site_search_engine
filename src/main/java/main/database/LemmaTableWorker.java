@@ -1,10 +1,10 @@
-package main.db;
+package main.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static main.db.DBConnection.getConnection;
+import static main.database.DBConnection.getConnection;
 
 public class LemmaTableWorker {
     public static final String SQL_QUERY_INSERT = "INSERT INTO _lemma(lemma, frequency, site_id) VALUES (?, ?, ?)";

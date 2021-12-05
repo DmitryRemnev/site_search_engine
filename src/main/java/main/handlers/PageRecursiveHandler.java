@@ -1,21 +1,25 @@
-package main;
+package main.handlers;
+
+import main.utilities.TaskManager;
+import main.constants.Constants;
 
 import java.util.*;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PageRecursiveAction extends RecursiveAction {
+public class PageRecursiveHandler extends RecursiveAction {
+
     private final PageHandler pageHandler;
     private final Set<String> allUrls;
     private final TaskManager taskManager = new TaskManager();
     public AtomicBoolean isCancel = new AtomicBoolean(false);
 
-    public PageRecursiveAction(PageHandler pageHandler) {
+    public PageRecursiveHandler(PageHandler pageHandler) {
         this.pageHandler = pageHandler;
         allUrls = Collections.synchronizedSet(new HashSet<>());
     }
 
-    public PageRecursiveAction(PageHandler pageHandler, Set<String> allUrls) {
+    public PageRecursiveHandler(PageHandler pageHandler, Set<String> allUrls) {
         this.pageHandler = pageHandler;
         this.allUrls = allUrls;
     }
@@ -26,7 +30,7 @@ public class PageRecursiveAction extends RecursiveAction {
 
     @Override
     protected void compute() {
-        List<PageRecursiveAction> taskList = new ArrayList<>();
+        List<PageRecursiveHandler> taskList = new ArrayList<>();
 
         for (String link : pageHandler.getUrls()) {
 
@@ -39,7 +43,7 @@ public class PageRecursiveAction extends RecursiveAction {
 
             var page = new PageHandler(link, pageHandler.getSiteName(), pageHandler.getBaseUrl());
             page.setSiteId(pageHandler.getSiteId());
-            var task = new PageRecursiveAction(page, allUrls);
+            var task = new PageRecursiveHandler(page, allUrls);
 
             task.fork();
             taskList.add(task);
@@ -57,7 +61,7 @@ public class PageRecursiveAction extends RecursiveAction {
             }
         }
 
-        for (PageRecursiveAction task : taskList) {
+        for (PageRecursiveHandler task : taskList) {
             task.join();
         }
     }

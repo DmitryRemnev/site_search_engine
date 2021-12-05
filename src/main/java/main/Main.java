@@ -1,11 +1,8 @@
 package main;
 
-import main.db.DBConnection;
-import main.db.PageTableWorker;
+import main.database.DBConnection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.concurrent.ForkJoinPool;
 
 @SpringBootApplication
 public class Main {
@@ -17,7 +14,7 @@ public class Main {
         System.out.println("Введите запрос: ");
         String searchQuery = scanner.nextLine();
 
-        new ForkJoinPool().invoke(new PageRecursiveAction(new PageHandler(Constants.BASE_URL)));
+        new ForkJoinPool().invoke(new PageRecursiveHandler(new PageHandler(Constants.BASE_URL)));
         PageTableWorker.executeMultiInsert();
 
         ContentHandler contentHandler = new ContentHandler();

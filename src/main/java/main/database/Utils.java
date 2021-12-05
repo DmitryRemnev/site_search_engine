@@ -1,11 +1,11 @@
-package main.db;
+package main.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static main.db.DBConnection.getConnection;
+import static main.database.DBConnection.getConnection;
 
 public class Utils {
 

@@ -1,6 +1,8 @@
-package main;
+package main.handlers;
 
-import main.db.SiteTableWorker;
+import main.constants.Constants;
+import main.enums.Status;
+import main.database.SiteTableWorker;
 import main.entities.Site;
 
 import java.sql.ResultSet;
@@ -10,11 +12,11 @@ import java.util.Date;
 import java.util.concurrent.ForkJoinPool;
 
 public class SiteHandler extends Thread {
-    private final PageRecursiveAction pageRecursiveAction;
+    private final PageRecursiveHandler pageRecursiveHandler;
     private final Site site;
 
-    public SiteHandler(PageRecursiveAction pageRecursiveAction, Site site) {
-        this.pageRecursiveAction = pageRecursiveAction;
+    public SiteHandler(PageRecursiveHandler pageRecursiveHandler, Site site) {
+        this.pageRecursiveHandler = pageRecursiveHandler;
         this.site = site;
     }
 
@@ -22,8 +24,8 @@ public class SiteHandler extends Thread {
         long start = System.currentTimeMillis();
         addSiteRecord();
         int siteId = getSiteId();
-        pageRecursiveAction.getPageHandler().setSiteId(siteId);
-        new ForkJoinPool().invoke(pageRecursiveAction);
+        pageRecursiveHandler.getPageHandler().setSiteId(siteId);
+        new ForkJoinPool().invoke(pageRecursiveHandler);
         new ContentHandler(siteId).toHandle();
         updateSiteRecord();
         System.out.println(siteId + " " + (System.currentTimeMillis() - start));

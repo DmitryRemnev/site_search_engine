@@ -1,4 +1,4 @@
-package main;
+package main.handlers;
 
 import main.entities.Site;
 

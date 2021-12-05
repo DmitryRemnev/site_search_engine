@@ -1,10 +1,12 @@
-package main;
+package main.handlers;
 
-import main.db.IndexTableWorker;
-import main.db.LemmaTableWorker;
-import main.db.PageTableWorker;
+import main.constants.Constants;
+import main.database.IndexTableWorker;
+import main.database.PageTableWorker;
 import main.entities.Page;
 import main.entities.RelevantPage;
+import main.utilities.Lemmatizer;
+import main.utilities.PageComparator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

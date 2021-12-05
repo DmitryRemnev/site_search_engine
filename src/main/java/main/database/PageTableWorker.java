@@ -1,13 +1,10 @@
-package main.db;
+package main.database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
-import static main.db.DBConnection.getConnection;
+import static main.database.DBConnection.getConnection;
 
 public class PageTableWorker {
     public static final String SQL_QUERY_INSERT = "INSERT INTO _page(path, code, content, site_id) VALUES (?, ?, ?, ?)";
