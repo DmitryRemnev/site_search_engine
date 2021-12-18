@@ -1,14 +1,13 @@
 package main.controller;
 
+import main.entities.*;
 import main.handlers.PageHandler;
 import main.handlers.PageRecursiveHandler;
+import main.handlers.SinglePageHandler;
 import main.handlers.SiteHandler;
 import main.service.StatisticsService;
 import main.config.AppConfig;
 import main.database.DBConnection;
-import main.entities.Site;
-import main.entities.StartResponse;
-import main.entities.YamlConfig;
 import main.entities.statistics.StatisticsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,14 +36,10 @@ public class SearchController {
     }
 
     @GetMapping("/api/startIndexing")
-    public StartResponse startFullIndexing() {
-        var response = new StartResponse();
+    public Response startFullIndexing() {
 
         if (isRunning) {
-            response.setResult(false);
-            response.setError("Индексация уже запущена");
-
-            return response;
+            return new BadResponse(false, "Индексация уже запущена");
 
         } else {
             isRunning = true;
@@ -59,23 +54,15 @@ public class SearchController {
 
             isRunning = false;
 
-            response.setResult(true);
-
-            return response;
+            return new GoodResponse(true);
         }
     }
 
     @GetMapping("/api/stopIndexing")
-    public StartResponse stopCurrentIndexing() {
-        var response = new StartResponse();
+    public Response stopCurrentIndexing() {
 
         if (!isRunning) {
-            //return ResponseEntity.badRequest().body("Индексация не запущена");
-
-            response.setResult(false);
-            response.setError("Индексация не запущена");
-
-            return response;
+            return new BadResponse(false, "Индексация не запущена");
 
         } else {
             for (PageRecursiveHandler pageRecursiveHandler : actionsList) {
@@ -83,26 +70,22 @@ public class SearchController {
             }
 
             isRunning = false;
-            //return ResponseEntity.ok("true");
 
-            response.setResult(true);
-
-            return response;
+            return new GoodResponse(true);
         }
     }
 
     /*@PostMapping("/api/indexPage")
-    public ResponseEntity<String> addingOrUpdatingSinglePage(@RequestParam("indexPage") String indexPage) {
+    public Response addingOrUpdatingSinglePage(String page) {
+        System.out.println(page);
         var singlePageHandler = new SinglePageHandler(sites, page);
 
         if (singlePageHandler.isUrlPresent()) {
-            return ResponseEntity.ok("true");
+            return new GoodResponse(true);
         } else {
-            return ResponseEntity.badRequest().body("Данная страница находится за пределами сайтов, " +
+            return new BadResponse(false, "Данная страница находится за пределами сайтов, " +
                     "указанных в конфигурационном файле");
         }
-        System.out.println(indexPage);
-        return ResponseEntity.ok("true");
     }*/
 
     @GetMapping("/api/statistics")
